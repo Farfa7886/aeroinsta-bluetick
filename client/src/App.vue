@@ -1,5 +1,6 @@
 <script setup>
 import axios from "axios"
+import Swal from 'sweetalert2'
 
 function copyServerUrl() {
   navigator.clipboard.writeText("https://aeroinsta-bluetick.vercel.app")
@@ -14,19 +15,32 @@ function addUsername() {
   document.getElementById("btn-add").setAttribute("disabled", "disabled")
 
   const username = document.getElementById("insta-usr").value
-  console.log(username)
 
   axios({
     method: 'post',
     url: `https://aeroinsta-bluetick.vercel.app/add/${username}`
   })
   .then((response) => {
-    console.log(response.data)
+    if (response.data.success) {
+      Swal.fire(
+        'Success',
+        'Username successfully added',
+        'success'
+      )
+    }
+  })
+  .catch((error) => {
+    Swal.fire(
+      'Uh oh!',
+      error.response.data.error,
+      'error'
+    )
   })
   .finally(() => {
     document.getElementById("btn-add-loading").style.display = "none"
     document.getElementById("btn-add-text").style.display = "block"
     document.getElementById("btn-add").removeAttribute("disabled")
+    document.getElementById("insta-usr").value = ""
   })
 }
 
