@@ -10,7 +10,7 @@ const Users = require('../models/UsersSchema.js');
 
 router.use(express.json());
 
-router.all("/add/:username", async (req, res) => {
+router.post("/add/:username", async (req, res) => {
 
   if (await Users.exists({username: req.params.username})) {
     res.status(409).json({
