@@ -8,11 +8,14 @@ const { getUsers } = require('./helpers/queryUsers.js');
 const Users = require('./models/UsersSchema.js');
 const cors = require('cors')
 
+var apiStarted = false;
+
 const connectionString = `mongodb+srv://${config.mongodb.username}:${config.mongodb.password}@aeroinstabluetick.jhtp0lq.mongodb.net/?retryWrites=true&w=majority`
 
 mongoose.connect(connectionString).then(async () => {
   console.log("Connected to database")
   cache.set("accounts", await getUsers())
+  apiStarted = true;
 })
 
 app.use(cors({
@@ -24,7 +27,12 @@ app.use(morgan('combined'));
 app.use("/", require("./routes/addUser.js"));
 
 app.all("/" , function (req, res) {
+  if (apiStarted) {
     res.send(cache.get('accounts'))
+  }
+  else {
+    res.send("Api is starting")
+  }
 })
 
 app.listen(config.api.port, () => {
