@@ -19,7 +19,6 @@ function tryConnection() {
     apiStarted = true;
   })
   .catch((err) => {
-    apiStarted = false;
     tryConnection();
   })
 }
