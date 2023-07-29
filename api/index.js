@@ -25,3 +25,5 @@ app.all("/" , function (req, res) {
 app.listen(config.api.port, () => {
   console.log("API started on port " + config.api.port + " (http://localhost:" + config.api.port + ")");
 }) 
+
+module.exports = app;
