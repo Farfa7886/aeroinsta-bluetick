@@ -12,7 +12,7 @@ router.use(express.json());
 
 router.post("/add/:username", async (req, res) => {
 
-  if ((cache.get("accounts")).includes(req.prarams.username)) {
+  if (await Users.exists({username: req.params.username})) {
     res.status(409).json({
       "success": false,
       "error": "Username already in database"
