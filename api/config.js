@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
   mongodb: {
-    username: "api",
+    username: process.env.MONGODB_USERNAME,
     password: process.env.MONGODB_PASSWORD
   },
   api: {
