@@ -12,11 +12,20 @@ var apiStarted = false;
 
 const connectionString = `mongodb+srv://${config.mongodb.username}:${config.mongodb.password}@aeroinstabluetick.jhtp0lq.mongodb.net/?retryWrites=true&w=majority`
 
-mongoose.connect(connectionString).then(async () => {
-  console.log("Connected to database")
-  cache.set("accounts", await getUsers())
-  apiStarted = true;
-})
+function tryConnection() {
+  mongoose.connect(connectionString).then(async () => {
+    console.log("Connected to database")
+    cache.set("accounts", await getUsers())
+    apiStarted = true;
+  })
+  .catch((err) => {
+    apiStarted = false;
+    tryConnection();
+  })
+}
+console.log("Connecting to database")
+tryConnection()
+
 
 app.use(cors({
   origin: '*'
