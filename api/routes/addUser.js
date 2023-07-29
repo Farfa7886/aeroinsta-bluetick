@@ -38,14 +38,17 @@ router.post("/add/:username", async (req, res) => {
   }
   else {
     if ((validateUser(req.params.username)).success) {
-      const user = new Users({"username": req.params.username})
-      user.save().then(() => { 
-        console.log(`Username ${req.params.username} has been added`);
-        cache.get("accounts", (cache.get("accounts").push(req.params.username)))
-        res.status(200).json({
-          "success": true
+      try {
+        const user = new Users({"username": req.params.username})
+        user.save().then(() => { 
+          console.log(`Username ${req.params.username} has been added`);
+          cache.get("accounts", (cache.get("accounts").push(req.params.username)))
+          res.status(200).json({
+            "success": true
+          })
         })
-      })
+      }
+      catch (e) {}
     }
     else {
       res.status(500).json(validateUser(req.params.username))
